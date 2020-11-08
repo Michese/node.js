@@ -6,39 +6,86 @@ const path = require('path');
 const server = http.createServer((req, res) => {
     if (req.method === 'GET') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
+        const url = req.url;
 
-        fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
-            try {
-                if (err) {
-                    throw err;
-                }
-                res.write(Buffer.from(data).toString(), err2 => {
-                    try {
-                        if (err2) {
-                            throw err2;
+        switch (url) {
+            case '/': {
+                fs.readFile(
+                    path.join(__dirname, 'view', 'index.html'),
+                    'utf-8',
+                    (err, data) => {
+                        try {
+                            if (err) {
+                                throw err;
+                            }
+                            res.end(data);
+                        } catch {
+                            console.error(err.message);
                         }
-                    } catch {
-                        console.error(err2.message);
                     }
-                });
-                res.end();
-            } catch {
-                console.error(err.message);
+                );
+                break;
             }
-        });
+            case '/about': {
+                fs.readFile(
+                    path.join(__dirname, 'view', 'about.html'),
+                    'utf-8',
+                    (err, data) => {
+                        try {
+                            if (err) {
+                                throw err;
+                            }
+                            res.end(data);
+                        } catch {
+                            console.error(err.message);
+                        }
+                    }
+                );
+                break;
+            }
+            default: {
+                fs.readFile(
+                    path.join(__dirname, 'view', '404error.html'),
+                    'utf-8',
+                    (err, data) => {
+                        try {
+                            if (err) {
+                                throw err;
+                            }
+                            res.end(data);
+                        } catch {
+                            console.error(err.message);
+                        }
+                    }
+                );
+            }
+        }
     }
     else if (req.method === 'POST') {
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8'});
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
         const body = [];
         req.on('data', data => {
+            console.log(Buffer.from(data));
             body.push(Buffer.from(data));
         })
         req.on('end', () => {
-            const message = body.toString().split('=')[0];
-            console.log(message);
-            res.end(`<h1>Ваше сообщение: ${message}</h1>`)
+            const message = body.toString().split('=')[1];
+            fs.readFile(
+                path.join(__dirname, 'view', 'about.html'),
+                'utf-8',
+                (err, data) => {
+                    try {
+                        if (err) {
+                            throw err;
+                        }
+                        res.write(data);
+                    } catch {
+                        console.error(err.message);
+                    }
+                    res.end()
+                }
+            )
         })
-
     }
 })
 
