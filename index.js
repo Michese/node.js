@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -41,6 +41,15 @@ const server = http.createServer((req, res) => {
                         }
                     }
                 );
+                break;
+            }
+            case '/api/users': {
+                res.writeHead(200, {'Content-type':'text/json'});
+                const arr = [
+                    {name: 'Ваня', age : 25},
+                    {name: 'Валя', age : 20}
+                ];
+                res.end(JSON.stringify(arr));
                 break;
             }
             default: {
