@@ -10,7 +10,6 @@ const server = http.createServer((req, res) => {
             if (err) {
                 throw err;
             }
-            console.log(Buffer.from(data).toString());
             res.write(Buffer.from(data).toString(), err2 => {
                 try {
                     if (err2) {
@@ -19,7 +18,6 @@ const server = http.createServer((req, res) => {
                 } catch {
                     console.error(err2.message);
                 }
-
             });
             res.end();
         } catch {
@@ -31,5 +29,5 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(3085, () => {
-    console.log('hello, world');
+    console.log('Server is runner ...');
 })
