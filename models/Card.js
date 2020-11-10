@@ -32,6 +32,34 @@ class Card {
         })
     }
 
+    static async remove(id) {
+        const card = await Card.fetch();
+        const idx = card.courses.findIndex(c => c.id === id);
+
+        card.price -= +card.courses[idx].price;
+        if(card.courses[idx].count === 1) {
+            // Удаляем
+            card.courses = card.courses.filter(c => c.id !== id);
+        } else {
+            // Уменьшаем на единицу
+            card.courses[idx].count--;
+        }
+
+        return new Promise((resolve, reject) => {
+            fs.writeFile(
+                path.join(__dirname, '..', 'data', 'card.json'),
+                JSON.stringify(card),
+                err => {
+                    if(err) {
+                        reject(err);
+                    } else {
+                        resolve(card);
+                    }
+                }
+            )
+        })
+    }
+
     static async fetch() {
         return new Promise((resolve, reject) => {
             fs.readFile(
