@@ -1,8 +1,9 @@
 <main>
     <h1>{{title}}</h1>
     {{#if courses.length}}
-    {{#each courses}}
     <div class="row">
+        {{#each courses}}
+
         <div class="col s5 m3">
             <div class="card">
                 <div class="card-image">
@@ -13,12 +14,14 @@
                     <p class="price">{{price}}</p>
                 </div>
                 <div class="card-action">
-                    <a href="#">Открыть курс</a>
+                    <a href="/courses/{{id}}" target="_blank">Открыть курс</a>
+                    <a href="/courses/{{id}}/edit?allow=true">Редактировать курс</a>
                 </div>
             </div>
         </div>
+
+        {{/each}}
     </div>
-    {{/each}}
     {{else}}
     <p>Курсов пока нет!</p>
     {{/if}}
