@@ -61,7 +61,9 @@ class Course {
 
     static async getCourseById(id) {
         const courses = await this.getAll();
-        return courses.find(course => course.id === id);
+        const course = courses.find(c => c.id === id)
+        // console.lo
+        return course;
     }
 
     static getAll() {
