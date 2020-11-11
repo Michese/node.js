@@ -1,3 +1,4 @@
+require('use-strict');
 const toCurrency = (price) => {
     return new Intl.NumberFormat('ru-RU', {
         currency: 'rub',
@@ -11,7 +12,7 @@ document.querySelectorAll('.price').forEach(node => {
 
 const $card = document.querySelector('#card');
 if ($card) {
-    card.addEventListener('click', event => {
+    $card.addEventListener('click', event => {
         if (event.target.classList.contains('btn-remove')) {
             fetch('/card/remove/' + event.target.dataset.id, {
                 method: 'delete'
