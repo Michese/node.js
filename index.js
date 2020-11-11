@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
 const app = express();
+const mongoose = require('mongoose');
 const addRouter = require('./routes/add');
 const aboutRouter = require('./routes/about');
 const coursesRouter = require('./routes/courses');
@@ -17,18 +18,27 @@ app.set('view engine', 'hbs');
 app.set('views', 'views');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({extended:false}));
-app.use('/add',addRouter)
-app.use('/about',aboutRouter);
-app.use('/',homeRouter);
-app.use('/courses',coursesRouter);
+app.use(express.urlencoded({ extended: false }));
+app.use('/add', addRouter)
+app.use('/about', aboutRouter);
+app.use('/', homeRouter);
+app.use('/courses', coursesRouter);
 app.use('/card', cardRouter);
 
 const PORT = process.env.PORT || 3085;
+async function start() {
+    try {
+        const password = 'qwer1234';
+        const url = `mongodb+srv://michese:${password}@cluster0.iotf0.mongodb.net/test?retryWrites=true&w=majority`
 
-const password = 'qwer1234';
-const url = `mongodb+srv://michese:${password}@cluster0.iotf0.mongodb.net/<dbname>?retryWrites=true&w=majority`
+        await mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}!`);
-})
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}!`);
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+start();
