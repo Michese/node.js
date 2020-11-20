@@ -3,27 +3,25 @@
     {{#if courses.length}}
     <div class="row">
         {{#each courses}}
-
         <div class="col s5 m5">
             <div class="card">
                 <div class="card-image">
-                    <img src="{{img}}" alt="{{title}}">
+                    <img src="{{{img}}}" alt="{{{title}}}">
                 </div>
                 <div class="card-content">
                     <span class="card-title">{{title}}</span>
                     <p class="price">{{price}}</p>
                 </div>
                 <div class="card-action actions">
-                    <a href="/courses/{{id}}" target="_blank">Открыть курс</a>
-                    <a href="/courses/{{id}}/edit?allow=true">Редактировать курс</a>
+                    <a href="/courses/{{_id}}" target="_blank">Открыть курс</a>
+                    <a href="/courses/{{_id}}/edit?allow=true">Редактировать курс</a>
                     <form action="/card/add" method="post">
-                        <input type="hidden" name="id" value="{{id}}">
+                        <input type="hidden" name="id" value="{{_id}}">
                         <button class="btn waves-effect waves-light" type="submit">Купить</button>
                     </form>
                 </div>
             </div>
         </div>
-
         {{/each}}
     </div>
     {{else}}

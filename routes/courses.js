@@ -3,12 +3,18 @@ const router = Router();
 const Course = require('../models/Course');
 
 router.get('/', async (req, res) => {
-    const coursest = await Course.getAll();
-    res.render('courses', {
-        title: 'Курсы',
-        isCourses: true,
-        courses: coursest
-    });
+    // const courses = await Course.getAll();
+    // const courses = await Course.findById("5fb800bda4a26a343cb7217c");
+    Course.find({}).then(courses => {
+        res.render('courses', {
+            title: "Курсы",
+            isCourses: true,
+            courses: courses.map(course => course.toJSON())
+        })
+    }).catch(err => {
+        console.error('Ошибка');
+        res.redirect('/');
+    })
 })
 
 router.get('/:id', async (req, res) => {
@@ -24,15 +30,23 @@ router.get('/:id/edit', async (req, res) => {
     if(!req.query.allow) {
         return redirect('/');
     }
-    const course = await Course.getCourseById(req.params.id);
-    res.render('edit-course', {
-        title: course.title,
-        course: course
-    });
+    Course.findById(req.params.id).then(course => {
+        res.render('edit-course', {
+            title: course.title,
+            course: course.toJSON()
+        });
+    })
 })
 
 router.post('/edit', async (req, res) => {
-    await Course.update(req.body);
+    const {id} = req.body;
+    delete req.body.id;
+    await Course.findByIdAndUpdate(id, req.body);
+    res.redirect('/courses');
+})
+
+router.post('/remove', async(req, res) => {
+    await Course.findByIdAndRemove(req.body.id);
     res.redirect('/courses');
 })
 
