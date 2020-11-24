@@ -9,11 +9,11 @@ document.querySelectorAll('.price').forEach(node => {
     node.textContent = toCurrency(node.textContent);
 })
 
-const $card = document.querySelector('#card');
+const $card = document.querySelector('#cart');
 if ($card) {
     $card.addEventListener('click', event => {
         if (event.target.classList.contains('btn-remove')) {
-            fetch('/card/remove/' + event.target.dataset.id, {
+            fetch('/cart/remove/' + event.target.dataset.id, {
                 method: 'delete'
             }).then(result => result.json())
                 .then(card => {
@@ -24,7 +24,7 @@ if ($card) {
                                 <td>${course.title}</td>
                                 <td>${course.count}</td>
                                 <td>
-                                    <button class="btn waves-effect waves-light btn-remove" data-id="${course.id}">Удалить</button>
+                                    <button class="btn waves-effect waves-light btn-remove" data-id="${course._id}">Удалить</button>
                                 </td>
                             </tr>
                             `;

@@ -4,8 +4,15 @@ const Course = require('../models/Course');
 
 const mapCartItems = (cart) => {
     return cart.items.map(item => ({
-        ...item.courseId._doc, count: item.count
+        ...item.courseId._doc, id:item.courseId.id, count: item.count
     }))
+}
+
+const calcPrice = (courses) => {
+    return courses.reduce((total, course) => {
+        total += course.count * course.price;
+        return total;
+    }, 0);
 }
 
 router.get('/', async (req, res) => {
@@ -13,15 +20,12 @@ router.get('/', async (req, res) => {
         .populate('cart.items.courseId')
         .execPopulate();
     const courses = mapCartItems(user.cart);
-    const totalPrice = courses.reduce((total, course) => {
-        total += course.count * course.price;
-        return total;
-    }, 0);
+
     res.render('cart', {
         title: 'Корзина',
         isCard: true,
         courses,
-        price: totalPrice
+        price: calcPrice(courses)
     })
 })
 
@@ -37,8 +41,14 @@ router.post('/add', (req, res) => {
 })
 
 router.delete('/remove/:id', async (req, res) => {
-    const card = await Card.remove(req.params.id);
-    res.json(card);
+    await req.user.removeFromCart(req.params.id);
+    const user = await req.user.populate('cart.items.courseId').execPopulate();
+    const courses = mapCartItems(user.cart);
+    const cart =  {
+        courses,
+        price: calcPrice(courses)
+    }
+    res.json(cart);
 })
 
 module.exports = router;

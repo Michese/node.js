@@ -25,13 +25,25 @@ const userSchema = Schema({
     }
 });
 
-userSchema.methods.addToCart = function(course) {
+userSchema.methods.addToCart = function (course) {
     let items = [...this.cart.items];
     const idx = items.findIndex(c => c.courseId.toString() === course._id.toString());
-    if(idx >= 0) {
+    if (idx >= 0) {
         items[idx].count++;
     } else {
-        items.push({courseId: course._id});
+        items.push({ courseId: course._id });
+    }
+    this.cart = { items };
+    return this.save();
+}
+
+userSchema.methods.removeFromCart = function (id) {
+    let items = [...this.cart.items];
+    const idx = items.findIndex(item => item.courseId == id);
+    if (items[idx].count > 1) {
+        items[idx].count--;
+    } else {
+        items = items.filter(item => item.courseId != id);
     }
     this.cart = {items};
     return this.save();

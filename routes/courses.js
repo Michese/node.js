@@ -1,4 +1,4 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const router = Router();
 const Course = require('../models/Course');
 
@@ -9,7 +9,13 @@ router.get('/', (req, res) => {
         res.render('courses', {
             title: "Курсы",
             isCourses: true,
-            courses: courses.map(course => course.toJSON())
+            courses: courses.map(course => {
+                const courseObj = course.toObject();
+                // courseObj.id = courseObj._id;
+                // delete courseObj._id;
+                // console.log(courseObj._id);
+                return courseObj;
+            })
         })
     }).catch(err => {
         console.error('Ошибка');
@@ -18,7 +24,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    Course.findById(req.params.id).then((course)=>{
+    Course.findById(req.params.id).then((course) => {
         res.render('course', {
             layout: 'course',
             course: course.toJSON()
@@ -28,7 +34,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.get('/:id/edit', async (req, res) => {
-    if(!req.query.allow) {
+    if (!req.query.allow) {
         return redirect('/');
     }
     Course.findById(req.params.id).then(course => {
@@ -40,13 +46,13 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 router.post('/edit', async (req, res) => {
-    const {id} = req.body;
+    const { id } = req.body;
     delete req.body.id;
     await Course.findByIdAndUpdate(id, req.body);
     res.redirect('/courses');
 })
 
-router.post('/remove', async(req, res) => {
+router.post('/remove', async (req, res) => {
     await Course.findByIdAndRemove(req.body.id);
     res.redirect('/courses');
 })
