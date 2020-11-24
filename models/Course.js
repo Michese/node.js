@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const {Schema, model, SchemaType} = require('mongoose');
 
 const course = new Schema({
     title: {
@@ -9,7 +9,12 @@ const course = new Schema({
         type: Number,
         required: true
     },
-    img: String
+    img: String,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
 module.exports = model('Course', course);

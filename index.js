@@ -6,8 +6,9 @@ const mongoose = require('mongoose');
 const addRouter = require('./routes/add');
 const aboutRouter = require('./routes/about');
 const coursesRouter = require('./routes/courses');
-const homeRouter = require('./routes/home.js');
+const homeRouter = require('./routes/home');
 const cardRouter = require('./routes/card');
+const User = require('./models/User');
 const hbs = exphbs.create({
     allowedProtoProperties: true,
     allowProtoMethodsByDefault: true,
@@ -18,6 +19,15 @@ const hbs = exphbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', 'views');
+
+app.use(async (req, res, next) => {
+    try{
+        req.user = await User.findById('5fbcb68ee9b8b405e81d808d');
+        next();
+    } catch(exp) {
+        console.error(exp);
+    }
+})
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
@@ -38,6 +48,17 @@ async function start() {
             useNewUrlParser: true,
              useUnifiedTopology: true 
             });
+        const candidate = await User.findOne();
+        if(!candidate) {
+            const user = new User({
+                name: 'Michse',
+                email: 'michese@mail.ru',
+                cart: {
+                    items: []
+                }
+            })
+            await user.save();
+        }
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}!`);

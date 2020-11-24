@@ -23,7 +23,6 @@ const user = Schema({
             }
         }]
     }
-
 });
 
 module.exports = model('User', user);
