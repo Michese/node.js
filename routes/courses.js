@@ -2,7 +2,7 @@ const {Router} = require('express');
 const router = Router();
 const Course = require('../models/Course');
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     // const courses = await Course.getAll();
     // const courses = await Course.findById("5fb800bda4a26a343cb7217c");
     Course.find({}).then(courses => {
@@ -17,13 +17,14 @@ router.get('/', async (req, res) => {
     })
 })
 
-router.get('/:id', async (req, res) => {
-    const course = await Course.getCourseById(req.params.id);
-    res.render('course', {
-        layout: 'course',
-        title: `Курс ${course.title}`,
-        course: course
-    });
+router.get('/:id', (req, res) => {
+    Course.findById(req.params.id).then((course)=>{
+        res.render('course', {
+            layout: 'course',
+            course: course.toJSON()
+        });
+    })
+
 })
 
 router.get('/:id/edit', async (req, res) => {
