@@ -4,7 +4,6 @@ const Order = require('../models/Order');
 
 router.get('/', (req, res) => {
     Order.find({'user.userId': req.user._id}).populate('user.userId').then(orders => {
-        console.log(orders[0].courses[0].count);
         res.render('orders', {
             title: 'Заказы',
             isOrders: true,

@@ -9,6 +9,7 @@ const cartRouter = require('./routes/cart');
 const coursesRouter = require('./routes/courses');
 const ordersRouter = require('./routes/orders')
 const homeRouter = require('./routes/home');
+const authRouter = require('./routes/auth');
 const User = require('./models/User');
 const hbs = exphbs.create({
     allowedProtoProperties: true,
@@ -38,6 +39,7 @@ app.use('/', homeRouter);
 app.use('/courses', coursesRouter);
 app.use('/cart', cartRouter);
 app.use('/orders', ordersRouter);
+app.use('/auth', authRouter);
 
 const PORT = process.env.PORT || 3085;
 async function start() {
