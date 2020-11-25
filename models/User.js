@@ -9,6 +9,10 @@ const userSchema = Schema({
         type: String,
         required: true
     },
+    password: {
+        type: String,
+        required: true
+    },
     cart: {
         items: [{
             count: {
@@ -45,12 +49,12 @@ userSchema.methods.removeFromCart = function (id) {
     } else {
         items = items.filter(item => item.courseId != id);
     }
-    this.cart = {items};
+    this.cart = { items };
     return this.save();
 }
 
-userSchema.methods.clearCart = function() {
-    this.cart = {items: []};
+userSchema.methods.clearCart = function () {
+    this.cart = { items: [] };
     return this.save();
 }
 

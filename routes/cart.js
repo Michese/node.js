@@ -17,9 +17,9 @@ const calcPrice = (courses) => {
 }
 
 router.get('/', auth, async (req, res) => {
-    const user = await req.session.user;
-    // .populate('cart.items.courseId')
-    // .execPopulate();
+    const user = await req.user
+    .populate('cart.items.courseId')
+    .execPopulate();
     const courses = mapCartItems(user.cart);
 
     res.render('cart', {
@@ -33,7 +33,7 @@ router.get('/', auth, async (req, res) => {
 router.post('/add', auth, (req, res) => {
     Course.findById(req.body.id).then(async (course) => {
         try {
-            await req.session.user.addToCart(course);
+            await req.user.addToCart(course);
             res.redirect('/cart');
         } catch (exp) {
             console.error(exp);

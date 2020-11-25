@@ -1,4 +1,4 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const router = Router();
 const User = require('../models/User');
 
@@ -10,26 +10,36 @@ router.get('/login', (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-    const user = await User.findById('5fbcb68ee9b8b405e81d808d').populate('courseId');
-    try {
-        req.session.user = user;
+    const {email, password} = req.body;
+    const candidate = await User.findOne({email, password});
+    if(candidate) {
+        req.session.user = candidate;
         req.session.isAuthorization = true;
-        req.session.save((err) => {
-            if(err) {
-                throw err;
-            }
-    
-            res.redirect('/');
-        });
-    } catch(err) {
-        console.error(err);
+        res.redirect('/');
+    } else {
+        res.redirect('/auth/login#login');
     }
-
-
 })
 
 router.post('/register', (req, res) => {
-    res.redirect('/');
+    const { email, name, password, confirm } = req.body;
+    User.findOne({ email }).then((candidate) => {
+        if(!candidate) {
+            throw 'Такого пользователя нет';
+        }
+
+        res.redirect('/auth/login#register');
+    }).catch(() => {
+        const user = new User({
+            name,
+            email,
+            password,
+            cart: { items: [] }
+        });
+        user.save(() => {
+            res.redirect('/auth/login#login');
+        });
+    })
 })
 
 router.get('/logout', (req, res) => {

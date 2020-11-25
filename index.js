@@ -12,6 +12,7 @@ const coursesRouter = require('./routes/courses');
 const ordersRouter = require('./routes/orders')
 const homeRouter = require('./routes/home');
 const varMiddleware = require('./middleware/variables');
+const userMiddleware = require('./middleware/user');
 const authRouter = require('./routes/auth');
 const hbs = exphbs.create({
     allowedProtoProperties: true,
@@ -39,6 +40,7 @@ app.use(session({
     store
 }))
 app.use(varMiddleware);
+app.use(userMiddleware);
 
 app.use('/add', addRouter);
 app.use('/about', aboutRouter);
