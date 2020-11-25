@@ -1,0 +1,27 @@
+<main>
+    <h1>{{title}}</h1>
+    {{#if orders.length}}
+    <div class="row">
+        <div class="col s12 m5">
+            {{#each orders}}
+            <div class="card-panel teal">
+                <h5>Номер заказа {{_id}}</h5>
+                <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                    I am convenient because I require little markup to use effectively. I am similar to what is called a
+                    panel in other frameworks.
+                </span>
+                <ol>
+                    {{#each courses}}
+                        <li>{{course.title}} x({{count}})</li>
+                    {{/each}}
+                </ol>
+                <p class="date">{{date}}</p>
+                <p>Цена: <span class="price">{{price}}</span></p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{else}}
+        <p>Заказов пока нет</p>
+    {{/if}}
+</main>

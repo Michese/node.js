@@ -7,6 +7,7 @@ const addRouter = require('./routes/add');
 const aboutRouter = require('./routes/about');
 const cartRouter = require('./routes/cart');
 const coursesRouter = require('./routes/courses');
+const ordersRouter = require('./routes/orders')
 const homeRouter = require('./routes/home');
 const User = require('./models/User');
 const hbs = exphbs.create({
@@ -36,6 +37,7 @@ app.use('/about', aboutRouter);
 app.use('/', homeRouter);
 app.use('/courses', coursesRouter);
 app.use('/cart', cartRouter);
+app.use('/orders', ordersRouter);
 
 const PORT = process.env.PORT || 3085;
 async function start() {
