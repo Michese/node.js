@@ -35,7 +35,7 @@ router.post('/add', (req, res) => {
             await req.user.addToCart(course);
             res.redirect('/cart');
         } catch (exp) {
-            console.log(exp);
+            console.error(exp);
         }
     })
 })

@@ -8,4 +8,19 @@ router.get('/login', (req, res) => {
     })
 })
 
+router.post('/login', (req, res) => {
+    req.session.isAuthorization = true;
+    res.redirect('/');
+})
+
+router.post('/register', (req, res) => {
+    res.redirect('/');
+})
+
+router.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/auth/login#login');
+    });
+})
+
 module.exports = router;
