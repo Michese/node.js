@@ -52,4 +52,8 @@
 .auth {
   padding-top: 1rem;
 }
+
+.login_error {
+  color: red;
+}
 /*# sourceMappingURL=style.css.map */

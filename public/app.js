@@ -29,7 +29,10 @@ if ($card) {
     $card.addEventListener('click', event => {
         if (event.target.classList.contains('btn-remove')) {
             fetch('/cart/remove/' + event.target.dataset.id, {
-                method: 'delete'
+                method: 'delete',
+                headers: {
+                    'X-XSRF-TOKEN': event.target.dataset.csrf
+                }
             }).then(result => result.json())
                 .then(card => {
                     if (card.courses.length) {
@@ -39,7 +42,7 @@ if ($card) {
                                 <td>${course.title}</td>
                                 <td>${course.count}</td>
                                 <td>
-                                    <button class="btn waves-effect waves-light btn-remove" data-id="${course._id}">Удалить</button>
+                                    <button class="btn waves-effect waves-light btn-remove" data-id="${course._id} data-csrf="${scrf}">Удалить</button>
                                 </td>
                             </tr>
                             `;
